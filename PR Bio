@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="gu">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The PR Studio – Wedding Biodata</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+</head>
+<body class="bg-gray-100 min-h-screen">
+
+  <!-- Header -->
+  <header class="bg-pink-600 text-white p-6 text-center text-2xl font-bold">
+    The PR Studio – Wedding Biodata
+  </header>
+
+  <!-- Form -->
+  <main class="max-w-xl mx-auto my-8 bg-white p-6 rounded-lg shadow">
+    <form id="bioForm" class="space-y-4">
+
+      <div>
+        <label class="block font-medium">પૂરું નામ</label>
+        <input type="text" id="fullName" class="w-full p-2 border rounded" required>
+      </div>
+
+      <div>
+        <label class="block font-medium">જન્મતારીખ</label>
+        <input type="date" id="dob" class="w-full p-2 border rounded" required>
+      </div>
+
+      <div>
+        <label class="block font-medium">લિંગ</label>
+        <select id="gender" class="w-full p-2 border rounded" required>
+          <option value="">પસંદ કરો</option>
+          <option>પુરુષ</option>
+          <option>સ્ત્રી</option>
+        </select>
+      </div>
+
+      <div>
+        <label class="block font-medium">ઊંચાઈ (cm)</label>
+        <input type="number" id="height" class="w-full p-2 border rounded">
+      </div>
+
+      <div>
+        <label class="block font-medium">ધર્મ</label>
+        <input type="text" id="religion" class="w-full p-2 border rounded">
+      </div>
+
+      <div>
+        <label class="block font-medium">કાસ્ટ</label>
+        <input type="text" id="caste" class="w-full p-2 border rounded">
+      </div>
+
+      <div>
+        <label class="block font-medium">શિક્ષણ</label>
+        <input type="text" id="education" class="w-full p-2 border rounded">
+      </div>
+
+      <div>
+        <label class="block font-medium">વ્યવસાય</label>
+        <input type="text" id="profession" class="w-full p-2 border rounded">
+      </div>
+
+      <div>
+        <label class="block font-medium">પિતાનું નામ</label>
+        <input type="text" id="fatherName" class="w-full p-2 border rounded">
+      </div>
+
+      <div>
+        <label class="block font-medium">માતાનું નામ</label>
+        <input type="text" id="motherName" class="w-full p-2 border rounded">
+      </div>
+
+      <div>
+        <label class="block font-medium">સંપર્ક નંબર</label>
+        <input type="tel" id="contact" class="w-full p-2 border rounded" required>
+      </div>
+
+      <div>
+        <label class="block font-medium">ઇમેજ અપલોડ કરો</label>
+        <input type="file" id="photo" accept="image/*" class="w-full">
+      </div>
+
+      <button type="button" onclick="makePDF()" 
+        class="px-6 py-3 bg-pink-600 text-white rounded-lg font-semibold hover:bg-pink-700 w-full">
+        PDF Download કરો
+      </button>
+    </form>
+  </main>
+
+  <!-- Footer -->
+  <footer class="text-center py-4 text-gray-500">
+    ©2025 The PR Studio. All rights reserved.
+  </footer>
+
+  <!-- Script -->
+  <script>
+    const { jsPDF } = window.jspdf;
+
+    async function makePDF() {
+      const pdf = new jsPDF();
+      pdf.setFontSize(16);
+      pdf.text("Made With The PR Studio", 20, 20);
+
+      // Form values
+      const fullName = document.getElementById("fullName").value;
+      const dob = document.getElementById("dob").value;
+      const gender = document.getElementById("gender").value;
+      const height = document.getElementById("height").value;
+      const religion = document.getElementById("religion").value;
+      const caste = document.getElementById("caste").value;
+      const education = document.getElementById("education").value;
+      const profession = document.getElementById("profession").value;
+      const fatherName = document.getElementById("fatherName").value;
+      const motherName = document.getElementById("motherName").value;
+      const contact = document.getElementById("contact").value;
+
+      let y = 40;
+      pdf.text(`નામ: ${fullName}`, 20, y); y+=10;
+      pdf.text(`જન્મતારીખ: ${dob}`, 20, y); y+=10;
+      pdf.text(`લિંગ: ${gender}`, 20, y); y+=10;
+      pdf.text(`ઊંચાઈ: ${height} cm`, 20, y); y+=10;
+      pdf.text(`ધર્મ: ${religion}`, 20, y); y+=10;
+      pdf.text(`કાસ્ટ: ${caste}`, 20, y); y+=10;
+      pdf.text(`શિક્ષણ: ${education}`, 20, y); y+=10;
+      pdf.text(`વ્યવસાય: ${profession}`, 20, y); y+=10;
+      pdf.text(`પિતાનું નામ: ${fatherName}`, 20, y); y+=10;
+      pdf.text(`માતાનું નામ: ${motherName}`, 20, y); y+=10;
+      pdf.text(`સંપર્ક: ${contact}`, 20, y); y+=20;
+
+      // Photo upload
+      const fileInput = document.getElementById("photo");
+      if (fileInput.files.length > 0) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          pdf.addImage(e.target.result, "JPEG", 150, 40, 40, 40);
+          pdf.save("Biodata.pdf");
+        };
+        reader.readAsDataURL(fileInput.files[0]);
+      } else {
+        pdf.save("Biodata.pdf");
+      }
+    }
+  </script>
+</body>
+</html>
